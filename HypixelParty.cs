@@ -34,6 +34,9 @@ namespace TitanixClient___Forms
             } else
             {
                 users = members.ToArray();
+                string last = users[users.Length - 1];
+                last = "and " + last;
+                users[users.Length - 1] = last;
             }
             string ustring = string.Join(", ", members);
             string final = "In a party with " + ustring;

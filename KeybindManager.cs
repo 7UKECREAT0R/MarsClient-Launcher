@@ -14,13 +14,186 @@ namespace TitanixClient___Forms
         public KeybindManager()
         {
             availableKeybinds.Add(new KeybindGame() {
-                gameInternalName = "solo_normal",
-                gameName = "Skywars Solo Normal"
+                gameInternalName = "play solo_normal",
+                gameName = "Skywars - Solo Normal"
             });
             availableKeybinds.Add(new KeybindGame()
             {
-                gameInternalName = "solo_insane",
-                gameName = "Skywars Solo Insane"
+                gameInternalName = "play solo_insane",
+                gameName = "Skywars - Solo Insane"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play teams_normal",
+                gameName = "Skywars - Teams Normal"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play teams_insane",
+                gameName = "Skywars - Teams Insane"
+            });
+
+
+
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play blitz_solo_normal",
+                gameName = "Blitz SG - Solo"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play blitz_teams_normal",
+                gameName = "Blitz SG - Teams"
+            });
+
+
+
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play bedwars_eight_one",
+                gameName = "Bed Wars - Solo"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play bedwars_eight_one",
+                gameName = "Bed Wars - Doubles"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play bedwars_four_three",
+                gameName = "Bed Wars - 3v3v3v3"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play bedwars_four_four",
+                gameName = "Bed Wars - 4v4v4v4"
+            });
+
+
+
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play sb",
+                gameName = "Skyblock"
+            });
+
+
+
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_classic_duel",
+                gameName = "Duels - Solo Classic"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_sw_duel",
+                gameName = "Duels - Solo Skywars"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_uhc_duel",
+                gameName = "Duels - Solo UHC"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_op_duel",
+                gameName = "Duels - Solo OP"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_sumo_duel",
+                gameName = "Duels - Sumo"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_bridge_duel",
+                gameName = "Duels - Solo The Bridge"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_classic_doubles",
+                gameName = "Duels - Doubles Classic"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_sw_doubles",
+                gameName = "Duels - Doubles Skywars"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_uhc_doubles",
+                gameName = "Duels - Doubles UHC"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_op_doubles",
+                gameName = "Duels - Doubles OP"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play duels_bridge_doubles",
+                gameName = "Duels - Doubles The Bridge"
+            });
+
+
+
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play murder_classic",
+                gameName = "Murder Mystery - Classic"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play murder_assassins",
+                gameName = "Murder Mystery - Assassins"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "play murder_infection",
+                gameName = "Murder Mystery - Infection"
+            });
+
+
+
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "tipall",
+                gameName = "GENERAL KEYBINDS - Tip All"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "pl",
+                gameName = "GENERAL KEYBINDS - Party List"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "fl",
+                gameName = "GENERAL KEYBINDS - Friends List"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "fl",
+                gameName = "GENERAL KEYBINDS - Friends List"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "fl",
+                gameName = "GENERAL KEYBINDS - Friends List"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "chat a",
+                gameName = "GENERAL KEYBINDS - All Chat Mode"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "chat p",
+                gameName = "GENERAL KEYBINDS - Party Chat Mode"
+            });
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = "p warp",
+                gameName = "GENERAL KEYBINDS - Warp Party"
             });
         }
         public void AddKeybind(string gameName, Keys key)
@@ -54,6 +227,10 @@ namespace TitanixClient___Forms
                     arr[i] = b;
             }
             keybinds = arr.ToList();
+        }
+        public void DeleteKeybind(Keybind k)
+        {
+            keybinds.Remove(k);
         }
 
         public string Serialize()
@@ -93,7 +270,7 @@ namespace TitanixClient___Forms
         public KeybindGame game;
         public override string ToString()
         {
-            return game.gameName + " | " + key.ToString();
+            return "(" + game.ToString() + "), CTRL+" + key.ToString();
         }
     }
 }

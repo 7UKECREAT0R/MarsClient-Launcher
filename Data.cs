@@ -8,24 +8,40 @@ using System.Threading.Tasks;
 
 namespace TitanixClient___Forms
 {
+    /*
+     * QUICK IDEAS
+     * ingame GUI via window attaching that has:
+     *     friends list support
+     *     adding/removing people
+     *     private messages that integrate with the game like steam overlay
+     *     multiple pm windows at once
+     *     
+     */
     static class Data
     {
         public static KeyboardHooking hook;
         public static KeybindManager keybinds;
 
-        public static HypixelParty party = new HypixelParty();
-        public static HypixelGame game = new HypixelGame();
+        public static HypixelParty party        = new HypixelParty();
+        public static HypixelGame game          = new HypixelGame();
 
-        public static string accessToken = "";
-        public static string clientToken = "";
-        public static string uuid = "";
-        public static string username = "";
+        public static bool _usingRichPresence   = true;
+        public static bool _showServerIP        = true;
+        public static bool _showGamePlaying     = true;
+        public static bool _showPartyInfo       = true;
+        public static bool _showUsername        = true;
 
-        public static string profileuuid = "";
+        public static string accessToken        = "";
+        public static string clientToken        = "";
+        public static string uuid               = "";
+        public static string username           = "";
 
-        public static bool offline = false;
+        public static string profileuuid        = "";
 
-        public static DiscordRPC.DiscordRpcClient rpccli = null;
+        public static bool offline              = false;
+
+        public static DiscordRPC
+            .DiscordRpcClient rpccli            = null;
         //public static string partySecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM=";
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]

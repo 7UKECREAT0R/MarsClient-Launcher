@@ -9,7 +9,7 @@ namespace TitanixClient___Forms
 {
     static class OutputManager
     {
-        [DllImport("kernel32.dll")]
+        /*[DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
@@ -18,7 +18,25 @@ namespace TitanixClient___Forms
 
         [DllImport("kernel32.dll", EntryPoint = "GetStdHandle", SetLastError = true,
             CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        private static extern IntPtr GetStdHandle(int nStdHandle);
+        private static extern IntPtr GetStdHandle(int nStdHandle);*/
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
+        public static void ShowConsoleWindow(bool show)
+        {
+            IntPtr hwnd = GetConsoleWindow();
+            if (show)
+                ShowWindow(hwnd, SW_SHOW);
+            else
+                ShowWindow(hwnd, SW_HIDE);
+        }
         // ------------------ END OF PINVOKE REGION -----------------
 
         /*public static bool HasConsole = false;

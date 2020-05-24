@@ -29,73 +29,67 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.minimizebutton = new System.Windows.Forms.Button();
             this.exitbutton = new System.Windows.Forms.Button();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.mainLauncher1 = new TitanixClient___Forms.MainLauncher();
             this.login1 = new TitanixClient___Forms.Login();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
-            // minimizebutton
+            // timer1
             // 
-            this.minimizebutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.minimizebutton.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.titanix_min;
-            this.minimizebutton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.minimizebutton.FlatAppearance.BorderSize = 0;
-            this.minimizebutton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.minimizebutton.Location = new System.Drawing.Point(764, 25);
-            this.minimizebutton.Name = "minimizebutton";
-            this.minimizebutton.Size = new System.Drawing.Size(30, 30);
-            this.minimizebutton.TabIndex = 1;
-            this.minimizebutton.UseVisualStyleBackColor = false;
-            this.minimizebutton.Click += new System.EventHandler(this.minimizebutton_Click);
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // exitbutton
             // 
-            this.exitbutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.exitbutton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("exitbutton.BackgroundImage")));
+            this.exitbutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
             this.exitbutton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.exitbutton.FlatAppearance.BorderSize = 0;
             this.exitbutton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.exitbutton.Location = new System.Drawing.Point(800, 25);
+            this.exitbutton.Font = new System.Drawing.Font("Exo 2", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exitbutton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
+            this.exitbutton.Location = new System.Drawing.Point(1214, 12);
             this.exitbutton.Name = "exitbutton";
-            this.exitbutton.Size = new System.Drawing.Size(30, 30);
+            this.exitbutton.Size = new System.Drawing.Size(38, 38);
             this.exitbutton.TabIndex = 1;
+            this.exitbutton.Text = "X";
             this.exitbutton.UseVisualStyleBackColor = false;
             this.exitbutton.Click += new System.EventHandler(this.exitbutton_Click);
-            // 
-            // mainLauncher1
-            // 
-            this.mainLauncher1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("mainLauncher1.BackgroundImage")));
-            this.mainLauncher1.Location = new System.Drawing.Point(0, 0);
-            this.mainLauncher1.Name = "mainLauncher1";
-            this.mainLauncher1.Size = new System.Drawing.Size(856, 482);
-            this.mainLauncher1.TabIndex = 0;
-            this.mainLauncher1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainLauncher1_MouseDown);
-            // 
-            // login1
-            // 
-            this.login1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("login1.BackgroundImage")));
-            this.login1.ForeColor = System.Drawing.Color.White;
-            this.login1.Location = new System.Drawing.Point(0, 0);
-            this.login1.Name = "login1";
-            this.login1.Size = new System.Drawing.Size(856, 482);
-            this.login1.TabIndex = 2;
             // 
             // notifyIcon1
             // 
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // mainLauncher1
+            // 
+            this.mainLauncher1.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSplash2;
+            this.mainLauncher1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.mainLauncher1.Location = new System.Drawing.Point(-7, 0);
+            this.mainLauncher1.Name = "mainLauncher1";
+            this.mainLauncher1.Size = new System.Drawing.Size(1280, 720);
+            this.mainLauncher1.TabIndex = 0;
+            this.mainLauncher1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainLauncher1_MouseDown);
+            // 
+            // login1
+            // 
+            this.login1.BackColor = System.Drawing.Color.Transparent;
+            this.login1.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSplash1;
+            this.login1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.login1.ForeColor = System.Drawing.Color.White;
+            this.login1.Location = new System.Drawing.Point(0, 0);
+            this.login1.Name = "login1";
+            this.login1.Size = new System.Drawing.Size(1280, 720);
+            this.login1.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 482);
+            this.ClientSize = new System.Drawing.Size(1264, 720);
             this.ControlBox = false;
-            this.Controls.Add(this.minimizebutton);
             this.Controls.Add(this.exitbutton);
             this.Controls.Add(this.mainLauncher1);
             this.Controls.Add(this.login1);
@@ -113,7 +107,6 @@
         private MainLauncher mainLauncher1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button exitbutton;
-        private System.Windows.Forms.Button minimizebutton;
         private Login login1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
     }

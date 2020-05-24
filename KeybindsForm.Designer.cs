@@ -32,6 +32,7 @@
             this.edit = new System.Windows.Forms.Button();
             this.picker = new System.Windows.Forms.ListBox();
             this.add = new System.Windows.Forms.Button();
+            this.delete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // confirm
@@ -64,7 +65,7 @@
             this.edit.ForeColor = System.Drawing.Color.White;
             this.edit.Location = new System.Drawing.Point(12, 362);
             this.edit.Name = "edit";
-            this.edit.Size = new System.Drawing.Size(240, 68);
+            this.edit.Size = new System.Drawing.Size(240, 31);
             this.edit.TabIndex = 0;
             this.edit.Text = "EDIT SELECTED...";
             this.edit.UseVisualStyleBackColor = false;
@@ -77,13 +78,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picker.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.picker.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.picker.Font = new System.Drawing.Font("Nexa Bold", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.picker.Font = new System.Drawing.Font("Nexa Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.picker.ForeColor = System.Drawing.Color.Silver;
             this.picker.FormattingEnabled = true;
-            this.picker.ItemHeight = 26;
+            this.picker.ItemHeight = 24;
             this.picker.Location = new System.Drawing.Point(12, 12);
             this.picker.Name = "picker";
-            this.picker.Size = new System.Drawing.Size(371, 338);
+            this.picker.Size = new System.Drawing.Size(371, 336);
             this.picker.TabIndex = 1;
             this.picker.SelectedIndexChanged += new System.EventHandler(this.picker_SelectedIndexChanged);
             // 
@@ -105,6 +106,25 @@
             this.add.UseVisualStyleBackColor = false;
             this.add.Click += new System.EventHandler(this.add_Click);
             // 
+            // delete
+            // 
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.delete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
+            this.delete.Enabled = false;
+            this.delete.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
+            this.delete.FlatAppearance.BorderSize = 0;
+            this.delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.delete.Font = new System.Drawing.Font("Nexa Bold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.delete.ForeColor = System.Drawing.Color.White;
+            this.delete.Location = new System.Drawing.Point(12, 399);
+            this.delete.Name = "delete";
+            this.delete.Size = new System.Drawing.Size(240, 31);
+            this.delete.TabIndex = 0;
+            this.delete.Text = "DELETE SELECTED...";
+            this.delete.UseVisualStyleBackColor = false;
+            this.delete.Click += new System.EventHandler(this.delete_Click);
+            // 
             // KeybindsForm
             // 
             this.AcceptButton = this.confirm;
@@ -115,6 +135,7 @@
             this.ClientSize = new System.Drawing.Size(395, 481);
             this.Controls.Add(this.picker);
             this.Controls.Add(this.add);
+            this.Controls.Add(this.delete);
             this.Controls.Add(this.edit);
             this.Controls.Add(this.confirm);
             this.DoubleBuffered = true;
@@ -131,5 +152,6 @@
         private System.Windows.Forms.Button edit;
         private System.Windows.Forms.ListBox picker;
         private System.Windows.Forms.Button add;
+        private System.Windows.Forms.Button delete;
     }
 }

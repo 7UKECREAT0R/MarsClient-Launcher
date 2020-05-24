@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace TitanixClient___Forms
 {
@@ -19,24 +20,14 @@ namespace TitanixClient___Forms
         public static readonly HttpClient client = new HttpClient();
         public readonly string yggdrasil = "https://authserver.mojang.com";
 
-        public float speed = 0.1f;
-        public int u_x = 0;
-        public int p_x = 70;
-        public int goal = 283;
-
         public Login()
         {
             InitializeComponent();
+            Form1.SetBorderCurve(25, confirmButton);
             DoubleBuffered = true;
-        }
-        private void passwordBox_TextChanged(object sender, EventArgs e)
-        {
-            if(!passwordBox.Text.Equals("Password"))
-            {
-                passwordBox.UseSystemPasswordChar = true;
-            } else {
-                passwordBox.UseSystemPasswordChar = false;
-            }
+
+            offlineCheckBox.title.Text = "Play Offline";
+            offlineCheckBox.subtitle.Text = "(Only username is required)";
         }
         public static int Lerp(int a, int b, double t)
         {
@@ -45,53 +36,47 @@ namespace TitanixClient___Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            u_x = Lerp(u_x, goal, speed);
-            Point u = usernameBox.Location;
-            u.X = u_x;
-            usernameBox.Location = u;
-
-            p_x = Lerp(p_x, goal, speed);
-            Point p = passwordBox.Location;
-            p.X = p_x;
-            passwordBox.Location = p;
-
             if(!string.IsNullOrEmpty(Data.accessToken))
             {
                 SendToBack();
             }
         }
 
-        private void usernameBox_Click(object sender, EventArgs e)
-        {
-            usernameBox.SelectAll();
-        }
-        private void passwordBox_Click(object sender, EventArgs e)
-        {
-            passwordBox.SelectAll();
-        }
         private void confirmButton_Click(object sender, EventArgs e)
         {
-            AttemptLoginWithoutToken();
+            if(!offlineCheckBox.isChecked)
+                AttemptLoginWithoutToken();
+            else
+            {
+                string uname = usernameBox.Text;
+                if (uname.Equals("Username") || string.IsNullOrEmpty(uname))
+                {
+                    MessageBox.Show("Please enter a username! You don't have to enter a password for this option.", "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                Data.username = uname;
+                Data.offline = true;
+                SendToBack();
+            }
         }
-        
         public void AttemptLoginWithoutToken()
         {
             string username = usernameBox.Text;
             string password = passwordBox.Text;
             if (string.IsNullOrEmpty(username) || username.Equals("Username"))
             {
-                MessageBox.Show("Please enter a username.", "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a username.", "Mars", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (string.IsNullOrEmpty(password) || password.Equals("Password"))
             {
-                MessageBox.Show("Please enter a password.", "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a password.", "Mars", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             string firstpost;
-            if(File.Exists("titanix_client\\clientToken.tok"))
+            if(File.Exists("mars_client\\clientToken.tok"))
             {
-                string token = File.ReadAllText("titanix_client\\clientToken.tok");
+                string token = File.ReadAllText("mars_client\\clientToken.tok");
                 firstpost =
                 "{\n" +
                 "   \"agent\": {\n" +
@@ -121,7 +106,7 @@ namespace TitanixClient___Forms
             if (j["errorMessage"] != null)
             {
                 string error = j["errorMessage"].ToString();
-                MessageBox.Show(error, "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(error, "Mars", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -132,10 +117,10 @@ namespace TitanixClient___Forms
             string name = j["availableProfiles"][0]["name"].ToString();
             string profileuuid = j["selectedProfile"]["id"].ToString();
 
-            File.WriteAllText("titanix_client\\accessToken.tok", atoken);
-            if(!File.Exists("titanix_client\\clientToken.tok"))
+            File.WriteAllText("mars_client\\accessToken.tok", atoken);
+            if(!File.Exists("mars_client\\clientToken.tok"))
             {
-                File.WriteAllText("titanix_client\\clientToken.tok", ctoken);
+                File.WriteAllText("mars_client\\clientToken.tok", ctoken);
             }
             Data.accessToken = atoken;
             Data.uuid = uuid;
@@ -147,8 +132,8 @@ namespace TitanixClient___Forms
         }
         public void AttemptLogin()
         {
-            string atoken = File.ReadAllText("titanix_client\\accessToken.tok");
-            string ctoken = File.ReadAllText("titanix_client\\clientToken.tok");
+            string atoken = File.ReadAllText("mars_client\\accessToken.tok");
+            string ctoken = File.ReadAllText("mars_client\\clientToken.tok");
 
             string validate = "{\n" +
             "   \"accessToken\": \"" + atoken + "\",\n" +
@@ -172,10 +157,10 @@ namespace TitanixClient___Forms
                     uname = jo["selectedProfile"]["name"].ToString();
                     uuid = jo["user"]["id"].ToString();
                     profileuuid = jo["selectedProfile"]["id"].ToString();
-                    File.WriteAllText("titanix_client\\accessToken.tok", atoken);
-                    File.WriteAllText("titanix_client\\clientToken.tok", ctoken);
+                    File.WriteAllText("mars_client\\accessToken.tok", atoken);
+                    File.WriteAllText("mars_client\\clientToken.tok", ctoken);
                 } catch(Exception exc) {
-                    MessageBox.Show(exc.Message + "\n\n" + exc.StackTrace, "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exc.Message + "\n\n" + exc.StackTrace, "Mars", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             Data.accessToken = atoken;
@@ -228,32 +213,13 @@ namespace TitanixClient___Forms
 
         private void Login_Load(object sender, EventArgs e)
         {
-            Region rg = offlineButton.Region;
-            if(rg != null) { rg.Dispose(); }
-            offlineButton.Region = Data.RoundedRect(10, offlineButton.Size);
-
-            rg = confirmButton.Region;
-            if (rg != null) { rg.Dispose(); }
-            confirmButton.Region = Data.RoundedRect(10, confirmButton.Size);
             timer1.Start();
 
-            if (File.Exists("titanix_client\\accessToken.tok")
-             && File.Exists("titanix_client\\clientToken.tok"))
+            if (File.Exists("mars_client\\accessToken.tok")
+             && File.Exists("mars_client\\clientToken.tok"))
             {
                 AttemptLogin();
             }
-        }
-        private void OfflineButton_Click(object sender, EventArgs e)
-        {
-            string uname = usernameBox.Text;
-            if (uname.Equals("Username") || string.IsNullOrEmpty(uname))
-            {
-                MessageBox.Show("Please enter a username! You don't have to enter a password for this option.", "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            Data.username = uname;
-            Data.offline = true;
-            SendToBack();
         }
 
         private void Login_MouseDown(object sender, MouseEventArgs e)

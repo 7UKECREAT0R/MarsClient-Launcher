@@ -72,7 +72,7 @@
             this.gameBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.gameBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.gameBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gameBox.Font = new System.Drawing.Font("Nexa Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameBox.Font = new System.Drawing.Font("Nexa Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gameBox.ForeColor = System.Drawing.Color.White;
             this.gameBox.FormattingEnabled = true;
             this.gameBox.Location = new System.Drawing.Point(12, 12);
@@ -86,7 +86,7 @@
             this.keyBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.keyBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.keyBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.keyBox.Font = new System.Drawing.Font("Nexa Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.keyBox.Font = new System.Drawing.Font("Nexa Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.keyBox.ForeColor = System.Drawing.Color.White;
             this.keyBox.FormattingEnabled = true;
             this.keyBox.Location = new System.Drawing.Point(97, 46);

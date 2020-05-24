@@ -37,10 +37,12 @@ namespace TitanixClient___Forms
         {
             try
             {
-                return Region.FromHrgn(CreateRoundRectRgn(0, 0, dim.Width, dim.Height, radius, radius));
+                IntPtr regionHandle = CreateRoundRectRgn(0, 0, dim.Width, dim.Height, radius, radius);
+                Region clone = Region.FromHrgn(regionHandle);
+                DeleteObject(regionHandle);
+                return clone;
             } catch(Exception)
             {
-
                 return null;
             }
         }
@@ -49,11 +51,7 @@ namespace TitanixClient___Forms
         {
             InitializeComponent();
             launchButton.Region = RoundedRect(20, launchButton.Size);
-            splash.Region = RoundedRect(buttonCurrentRoundness, splash.Size);
-            keybindsButton.Region = RoundedRect(15, keybindsButton.Size);
 
-            toolTip1.SetToolTip(signout, "Sign Out");
-            toolTip1.SetToolTip(launchButton, "Starts minecraft.");
             toolTip1.SetToolTip(serverPicker, "The server to automatically join when the game starts.");
             toolTip1.SetToolTip(versionSelector, "The version that will be launched and/or downloaded.");
 
@@ -63,8 +61,8 @@ namespace TitanixClient___Forms
 
         private void MainLauncher_Paint(object sender, PaintEventArgs e)
         {
-            var logo = Properties.Resources.titanix_logo;
-            e.Graphics.DrawImage(logo, new Rectangle(40, 25, divideRound(logo.Width, 3), divideRound(logo.Height, 3)));
+            //var logo = Properties.Resources.titanix_logo;
+            //e.Graphics.DrawImage(logo, new Rectangle(40, 25, divideRound(logo.Width, 3), divideRound(logo.Height, 3)));
         }
         public int divideRound(double a, double b)
         {
@@ -74,23 +72,15 @@ namespace TitanixClient___Forms
         {
             return (int)Math.Round((1 - t) * a + t * b);
         }
-        private void McLaunchThread_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker self = (BackgroundWorker)sender;
-            string[] args = (string[])e.Argument;
-            string version = args[0];
-            string sptxt = args[1];
-
-        }
         private void launchButton_Click(object sender, EventArgs e)
         {
             string sptxt = serverPicker.Text;
             if (!string.IsNullOrEmpty(sptxt))
             {
-                File.WriteAllText("titanix_client\\serverip.ser", sptxt);
+                File.WriteAllText("mars_client\\serverip.ser", sptxt);
             } else
             {
-                File.WriteAllText("titanix_client\\serverip.ser", "");
+                File.WriteAllText("mars_client\\serverip.ser", "");
             }
             object _version = versionSelector.SelectedItem;
             if(_version == null)
@@ -99,10 +89,13 @@ namespace TitanixClient___Forms
                 return;
             }
             string version = (string)_version;
-            File.WriteAllText("titanix_client\\version.ser", version);
+            File.WriteAllText("mars_client\\version.ser", version);
             string path = Minecraft.GetOSDefaultPath();
             CMLauncher launcher = new CMLauncher(path);
             bool forge = version.ToLower().Contains("forge");
+
+            OutputManager.ShowConsoleWindow(true);
+            Console.WriteLine("[MARS] Setting up launch arguments... Please wait!");
 
             MSession ssh;
             if (!Data.offline)
@@ -118,6 +111,9 @@ namespace TitanixClient___Forms
                 string username = Data.username;
                 ssh = MSession.GetOfflineSession(username);
             }
+
+            Console.WriteLine("[MARS] Successfully created session.");
+
             MLaunchOption options = new MLaunchOption()
             {
                 JavaPath = "java.exe",
@@ -125,9 +121,12 @@ namespace TitanixClient___Forms
                 Session = ssh,
 
                 VersionType = version,
-                GameLauncherName = "TitanixClient",
-                GameLauncherVersion = "1.3",
+                GameLauncherName = "MarsClient",
+                GameLauncherVersion = "1.4",
             };
+
+            Console.WriteLine("[MARS] Assigned launch options.");
+
             if (forge)
             {
                 string[] parts = version.Split('-');
@@ -142,6 +141,9 @@ namespace TitanixClient___Forms
             {
                 options.ServerIp = sptxt;
             }
+
+            Console.WriteLine("[MARS] Located target profile. Launching...");
+
             Data.hook.OnHookKeyPressed += Hook_OnHookKeyPressed;
             MLaunch launch = new MLaunch(options);
             mcThread = new Thread(new ParameterizedThreadStart(delegate(object obj) {
@@ -212,13 +214,14 @@ namespace TitanixClient___Forms
                 if (kb.key == args.pressed)
                 {
                     string text = kb.game.gameInternalName;
-                    KeyboardHooking.SendCTRLUp(minecraftHWND);
-                    Thread.Sleep(1000);
-                    SendKeys.Send("/");
-                    Thread.Sleep(1000);
-                    SendKeys.Send("play " + text);
-                    Thread.Sleep(1000);
-                    SendKeys.Send("{ENTER}");
+                    //KeyboardHooking.SendCTRLUp(minecraftHWND);
+                    Thread.Sleep(50);
+                    SendKeys.SendWait("/");
+                    Thread.Sleep(50);
+                    Clipboard.SetText(text);
+                    SendKeys.SendWait("v");
+                    Thread.Sleep(50);
+                    SendKeys.SendWait("{ENTER}");
                     break;
                 }
             }
@@ -226,11 +229,11 @@ namespace TitanixClient___Forms
 
         private void signout_Click(object sender, EventArgs e)
         {
-            if(File.Exists("titanix_client\\accessToken.tok"))
-                File.Delete("titanix_client\\accessToken.tok");
+            if(File.Exists("mars_client\\accessToken.tok"))
+                File.Delete("mars_client\\accessToken.tok");
 
-            if (File.Exists("titanix_client\\uuid.tok"))
-                File.Delete("titanix_client\\uuid.tok");
+            if (File.Exists("mars_client\\uuid.tok"))
+                File.Delete("mars_client\\uuid.tok");
 
             Data.accessToken = ""; Data.uuid = "";
             SendToBack();
@@ -253,7 +256,7 @@ namespace TitanixClient___Forms
             {
                 buttonCurrentRoundness = Lerp(buttonCurrentRoundness, buttonGoalRoundness, 0.07);
                 Region lbr = launchButton.Region;
-                if(lbr != null) { lbr.Dispose(); }
+                lbr?.Dispose();
                 launchButton.Region = RoundedRect(buttonCurrentRoundness, launchButton.Size);
             }
         }
@@ -273,14 +276,14 @@ namespace TitanixClient___Forms
                     versionSelector.Items.Add(md.Name);
                 }
             }
-            if(File.Exists("titanix_client\\serverip.ser"))
+            if(File.Exists("mars_client\\serverip.ser"))
             {
-                string ip = File.ReadAllText("titanix_client\\serverip.ser");
+                string ip = File.ReadAllText("mars_client\\serverip.ser");
                 serverPicker.Text = ip;
             }
-            if (File.Exists("titanix_client\\version.ser"))
+            if (File.Exists("mars_client\\version.ser"))
             {
-                string ver = File.ReadAllText("titanix_client\\version.ser");
+                string ver = File.ReadAllText("mars_client\\version.ser");
                 versionSelector.SelectedItem = ver;
             }
         }
@@ -300,51 +303,45 @@ namespace TitanixClient___Forms
         {
             if (staticMC != null)
             {
-                /*if(mcOut == null) { mcOut = staticMC.StandardOutput; }
-                do
+                if (Data._usingRichPresence)
                 {
-                    string str = mcOut.ReadLine();
-                    Console.WriteLine(str);
-                    if (str != null)
+                    // Do rich presence update.
+                    DiscordRPC.DiscordRpcClient rpc = Data.rpccli;
+                    string serv = "Details hidden.";
+                    if (Data._showServerIP)
                     {
-                        if (str.Contains("[Client thread/INFO]: Connecting to"))
+                        serv = currentServer;
+                        if (string.IsNullOrEmpty(serv))
+                            serv = "Not playing on any servers.";
+                    }
+                    if (Data._showPartyInfo)
+                    {
+                        if (Data._showServerIP)
+                            serv += "\n" + Data.party.GetPartyString();
+                        else
+                            serv = Data.party.GetPartyString();
+                    }
+                    string state = "Playing Minecraft.";
+                    if (Data._showUsername)
+                    {
+                        state = "Playing as " + Data.username;
+                    }
+                    string smallImageText = "Playing Minecraft";
+                    if(Data._showGamePlaying)
+                        smallImageText += " - " + Data.game.ToString();
+                    rpc.SetPresence(new DiscordRPC.RichPresence()
+                    {
+                        State = state,
+                        Details = serv,
+                        Assets = new DiscordRPC.Assets()
                         {
-                            int timeind = str.IndexOf(']');
-                            string a = str.Substring(timeind + 38);
-                            string b = a.Split(',')[0];
-                            string newserver = "Server: " + b;
-                            if (!currentServer.Equals(newserver))
-                            {
-                                Console.WriteLine("Connected to: \"" + b + "\"");
-                            }
-                            currentServer = "Server: " + b;
+                            LargeImageKey = "logo",
+                            LargeImageText = "MarsClient",
+                            SmallImageKey = "mc_png",
+                            SmallImageText = smallImageText
                         }
-                    }
-                } while (mcOut.Peek() > 0);*/
-
-                // Do rich presence update
-                DiscordRPC.DiscordRpcClient rpc = Data.rpccli;
-                string serv = currentServer;
-                if(string.IsNullOrEmpty(serv))
-                {
-                    serv = "Not playing on any servers.";
+                    });
                 }
-                serv += "\n" + Data.party.GetPartyString();
-                string state = "Playing as " + Data.username;
-                rpc.SetPresence(new DiscordRPC.RichPresence()
-                {
-                    State = state,
-                    Details = serv,
-                    Assets = new DiscordRPC.Assets()
-                    {
-                        LargeImageKey = "logo",
-                        LargeImageText = "TitanixClient",
-                        SmallImageKey = "mc_png",
-                        SmallImageText = "Playing Minecraft - " + Data.game.ToString()
-                    }
-                });
-                //rpc.Invoke();
-                //Console.WriteLine("RPC Update fired");
             }
         }
 
@@ -353,6 +350,11 @@ namespace TitanixClient___Forms
 
         [DllImport("user32.dll")]
         static extern short GetKeyState(Keys nVirtKey);
+
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
         static bool GetKeyDown(Keys k)
         {
             return Convert.ToBoolean(GetKeyState(k) & 0x8000);
@@ -360,9 +362,9 @@ namespace TitanixClient___Forms
 
         private void keybindsButton_Click(object sender, EventArgs e)
         {
-            KeybindsForm kbf = new KeybindsForm();
-            kbf.FormClosing += delegate {kbf.Dispose();};
-            kbf.Show();
+            SettingsMenu stm = new SettingsMenu();
+            stm.FormClosing += delegate {stm.Dispose();};
+            stm.Show();
         }
     }
 }
