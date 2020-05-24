@@ -17,4 +17,4 @@ The features/upcoming features in this "client" include:
 - [x] Hypixel game status.
 - [x] Hypixel party status.
 - [x] Hypixel keybinds which teleport you to a game.
-- [ ] Potentially an in-game UI.
+- [ ] In-game GUI with Hypixel chat windows and friends list management.
