@@ -20,4 +20,4 @@ The features/upcoming features in this "client" include:
 - [ ] In-game GUI with Hypixel chat windows and friends list management. (Required method figured out, currently in development.)
 -----------------------------
 ## How does the GUI work?
-We use the SetParent function with a custom window to attach a "GUI" to minecraft [SEE HERE](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setparent). Keyboard hooks are used to detect when a hotkey is pressed and SendKeys functions are called to send chat commands.
+We use the SetParent function with a custom window to attach a "GUI" to minecraft [SEE HERE](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setparent). A keyboard hook is used to detect when a hotkey is pressed and SendKeys functions are called to send chat commands.
