@@ -14,7 +14,10 @@ The features/upcoming features in this "client" include:
 - [x] Launch any Optifine version.
 - [x] Launch any vanilla version.
 - [x] Discord rich presence.
-- [x] Hypixel game status.
-- [x] Hypixel party status.
+- [x] Hypixel game status. (Rich Presence)
+- [x] Hypixel party status. (Rich Presence)
 - [x] Hypixel keybinds which teleport you to a game.
-- [ ] In-game GUI with Hypixel chat windows and friends list management.
+- [ ] In-game GUI with Hypixel chat windows and friends list management. (Required method figured out, currently in development.)
+-----------------------------
+## How does the GUI work?
+We use the SetParent function with a custom window to attach a "GUI" to minecraft [SEE HERE](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setparent). Keyboard hooks are used to detect when a hotkey is pressed and SendKeys functions are called to send chat commands.
