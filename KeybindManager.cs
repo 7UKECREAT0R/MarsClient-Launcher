@@ -5,14 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public class KeybindManager
     {
+        public const string INTERN_GUI = "{INTERNAL_TOGGLEGUI}";
         public List<KeybindGame> availableKeybinds = new List<KeybindGame>();
         public List<Keybind> keybinds = new List<Keybind>();
         public KeybindManager()
         {
+            availableKeybinds.Add(new KeybindGame()
+            {
+                gameInternalName = INTERN_GUI,
+                gameName = "TOGGLE IN-GAME GUI"
+            });
+
             availableKeybinds.Add(new KeybindGame() {
                 gameInternalName = "play solo_normal",
                 gameName = "Skywars - Solo Normal"

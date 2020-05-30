@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public partial class SettingsMenu : Form
     {
         public const int SETTINGS_TAB_WIDTH = 568;
         public const int SETTINGS_TAB_HEIGHT = 609;
+        public const int SETTINGS_TAB_X = 698;
         public SettingsMenu()
         {
             InitializeComponent();

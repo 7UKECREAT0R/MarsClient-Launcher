@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public partial class Login : UserControl
     {
@@ -51,7 +51,7 @@ namespace TitanixClient___Forms
                 string uname = usernameBox.Text;
                 if (uname.Equals("Username") || string.IsNullOrEmpty(uname))
                 {
-                    MessageBox.Show("Please enter a username! You don't have to enter a password for this option.", "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Please enter a username! You don't have to enter a password for this option.", "Mars", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
                 Data.username = uname;
@@ -113,7 +113,7 @@ namespace TitanixClient___Forms
             // First login
             string atoken = j["accessToken"].ToString();
             string ctoken = j["clientToken"].ToString();
-            string uuid = j["user"]["id"].ToString();
+            string mjuuid = j["user"]["id"].ToString();
             string name = j["availableProfiles"][0]["name"].ToString();
             string profileuuid = j["selectedProfile"]["id"].ToString();
 
@@ -123,10 +123,10 @@ namespace TitanixClient___Forms
                 File.WriteAllText("mars_client\\clientToken.tok", ctoken);
             }
             Data.accessToken = atoken;
-            Data.uuid = uuid;
+            Data.mojangUUID = mjuuid;
             Data.clientToken = ctoken;
             Data.username = name;
-            Data.profileuuid = profileuuid;
+            Data.mcUUID = profileuuid;
             Data.offline = false;
             SendToBack();
         }
@@ -164,10 +164,10 @@ namespace TitanixClient___Forms
                 }
             }
             Data.accessToken = atoken;
-            Data.uuid = uuid;
+            Data.mojangUUID = uuid;
             Data.clientToken = ctoken;
             Data.username = uname;
-            Data.profileuuid = profileuuid;
+            Data.mcUUID = profileuuid;
             Data.offline = false;
             SendToBack();
         }

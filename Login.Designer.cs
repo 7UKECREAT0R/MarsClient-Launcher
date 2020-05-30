@@ -1,4 +1,4 @@
-﻿namespace TitanixClient___Forms
+﻿namespace MarsClientLauncher
 {
     partial class Login
     {
@@ -31,9 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.confirmButton = new System.Windows.Forms.Button();
-            this.passwordBox = new TitanixClient___Forms.TextBoxCueExtension();
-            this.usernameBox = new TitanixClient___Forms.TextBoxCueExtension();
-            this.offlineCheckBox = new TitanixClient___Forms.SmoothCheckBox();
+            this.passwordBox = new MarsClientLauncher.TextBoxCueExtension();
+            this.usernameBox = new MarsClientLauncher.TextBoxCueExtension();
+            this.offlineCheckBox = new MarsClientLauncher.SmoothCheckBox();
             this.SuspendLayout();
             // 
             // timer1
@@ -102,7 +102,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSplash1;
+            this.BackgroundImage = global::MarsClientLauncher.Properties.Resources.marsSplash1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.passwordBox);
             this.Controls.Add(this.usernameBox);

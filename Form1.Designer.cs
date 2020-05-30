@@ -1,4 +1,4 @@
-﻿namespace TitanixClient___Forms
+﻿namespace MarsClientLauncher
 {
     partial class Form1
     {
@@ -29,18 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.animator = new System.Windows.Forms.Timer(this.components);
             this.exitbutton = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.mainLauncher1 = new TitanixClient___Forms.MainLauncher();
-            this.login1 = new TitanixClient___Forms.Login();
+            this.mainLauncher1 = new MarsClientLauncher.MainLauncher();
+            this.login1 = new MarsClientLauncher.Login();
+            this.closingTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // timer1
+            // animator
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.animator.Enabled = true;
+            this.animator.Interval = 1000;
+            this.animator.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // exitbutton
             // 
@@ -65,7 +66,7 @@
             // 
             // mainLauncher1
             // 
-            this.mainLauncher1.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSplash2;
+            this.mainLauncher1.BackgroundImage = global::MarsClientLauncher.Properties.Resources.marsSplash2;
             this.mainLauncher1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.mainLauncher1.Location = new System.Drawing.Point(-7, 0);
             this.mainLauncher1.Name = "mainLauncher1";
@@ -76,13 +77,19 @@
             // login1
             // 
             this.login1.BackColor = System.Drawing.Color.Transparent;
-            this.login1.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSplash1;
+            this.login1.BackgroundImage = global::MarsClientLauncher.Properties.Resources.marsSplash1;
             this.login1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.login1.ForeColor = System.Drawing.Color.White;
             this.login1.Location = new System.Drawing.Point(0, 0);
             this.login1.Name = "login1";
             this.login1.Size = new System.Drawing.Size(1280, 720);
             this.login1.TabIndex = 2;
+            // 
+            // closingTimer
+            // 
+            this.closingTimer.Enabled = true;
+            this.closingTimer.Interval = 250;
+            this.closingTimer.Tick += new System.EventHandler(this.closingTimer_Tick);
             // 
             // Form1
             // 
@@ -105,10 +112,11 @@
         #endregion
 
         private MainLauncher mainLauncher1;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer animator;
         private System.Windows.Forms.Button exitbutton;
         private Login login1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Timer closingTimer;
     }
 }
 

@@ -14,7 +14,7 @@ using DiscordRPC;
 using DiscordRPC.Logging;
 using DiscordRPC.Events;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public partial class Form1 : Form
     {
@@ -53,8 +53,10 @@ namespace TitanixClient___Forms
             if (!File.Exists("mars_client\\bindings.ser"))
                 Data.keybinds = new KeybindManager();
             else
+            {
                 Data.keybinds = KeybindManager.Deserialize(
                     File.ReadAllText("mars_client\\bindings.ser"));
+            }
         }
 
         public Form1()
@@ -69,16 +71,20 @@ namespace TitanixClient___Forms
         }
         public void SetBorderCurve(int radius)
         {
-            Region r = this.Region;
+            Region r = Region;
             if(r != null) { r.Dispose(); }
-            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, radius, radius));
+            IntPtr toBeDestroyed = CreateRoundRectRgn(0, 0, Width, Height, radius, radius);
+            Region = Region.FromHrgn(toBeDestroyed);
+            MainLauncher.DeleteObject(toBeDestroyed);
         }
         public static void SetBorderCurve(int radius, Control ctrl)
         {
             Region r = ctrl.Region;
             if (r != null) { r.Dispose(); }
-            r = Region.FromHrgn(CreateRoundRectRgn(0, 0, ctrl.Width, ctrl.Height, radius, radius));
+            IntPtr toBeDestroyed = CreateRoundRectRgn(0, 0, ctrl.Width, ctrl.Height, radius, radius);
+            r = Region.FromHrgn(toBeDestroyed);
             ctrl.Region = r;
+            MainLauncher.DeleteObject(toBeDestroyed);
             return;
         }
         public int Round(float f)
@@ -98,10 +104,13 @@ namespace TitanixClient___Forms
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
+
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
+
         private void MainLauncher1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -113,10 +122,15 @@ namespace TitanixClient___Forms
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             File.WriteAllText("mars_client\\bindings.ser", Data.keybinds.Serialize());
+            if (Data.player != null)
+                File.WriteAllText("mars_client\\hypixelself.ser", Data.player.Serialize());
             Data.rpccli.Dispose();
             Data.hook.Dispose();
             if(MainLauncher.mcThread != null)
                 MainLauncher.mcThread.Abort();
+            Data.mcProcess?.Dispose();
+            Data.hud?.Close();
+            Data.hud?.Dispose();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -248,7 +262,15 @@ namespace TitanixClient___Forms
             n.Y = orig.Y + 0;
             Location = n;
 
-            timer1.Stop();
+            animator.Stop();
+        }
+        private void closingTimer_Tick(object sender, EventArgs e)
+        {
+            if (mainLauncher1.minecraftClosed)
+            {
+                closingTimer.Stop();
+                Close();
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TitanixClient___Forms
+﻿namespace MarsClientLauncher
 {
     partial class Settings_OtherControl
     {
@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.showHypixelGame = new TitanixClient___Forms.SmoothCheckBox();
-            this.showServerIP = new TitanixClient___Forms.SmoothCheckBox();
-            this.showPartyInfo = new TitanixClient___Forms.SmoothCheckBox();
-            this.useRichPresence = new TitanixClient___Forms.SmoothCheckBox();
-            this.showUsername = new TitanixClient___Forms.SmoothCheckBox();
+            this.showHypixelGame = new MarsClientLauncher.SmoothCheckBox();
+            this.showServerIP = new MarsClientLauncher.SmoothCheckBox();
+            this.showPartyInfo = new MarsClientLauncher.SmoothCheckBox();
+            this.useRichPresence = new MarsClientLauncher.SmoothCheckBox();
+            this.showUsername = new MarsClientLauncher.SmoothCheckBox();
             this.SuspendLayout();
             // 
             // showHypixelGame

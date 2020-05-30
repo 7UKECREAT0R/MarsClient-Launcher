@@ -15,7 +15,7 @@ using CmlLib.Core;
 using CmlLib;
 using System.Reflection;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public partial class MainLauncher : UserControl
     {
@@ -23,6 +23,8 @@ namespace TitanixClient___Forms
 
         internal static Process staticMC = null;
         internal static Thread mcThread = null;
+
+        public bool minecraftClosed = false;
 
         static string currentServer = "";
         bool launched = false;
@@ -52,9 +54,6 @@ namespace TitanixClient___Forms
             InitializeComponent();
             launchButton.Region = RoundedRect(20, launchButton.Size);
 
-            toolTip1.SetToolTip(serverPicker, "The server to automatically join when the game starts.");
-            toolTip1.SetToolTip(versionSelector, "The version that will be launched and/or downloaded.");
-
             timer1.Start();
             rpcTimer.Start();
         }
@@ -74,7 +73,7 @@ namespace TitanixClient___Forms
         }
         private void launchButton_Click(object sender, EventArgs e)
         {
-            string sptxt = serverPicker.Text;
+            string sptxt = Data.serverIP;
             if (!string.IsNullOrEmpty(sptxt))
             {
                 File.WriteAllText("mars_client\\serverip.ser", sptxt);
@@ -82,16 +81,15 @@ namespace TitanixClient___Forms
             {
                 File.WriteAllText("mars_client\\serverip.ser", "");
             }
-            object _version = versionSelector.SelectedItem;
+            object _version = Data.versionString;
             if(_version == null)
             {
-                MessageBox.Show("Please select a version!", "Titanix", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a version!", "Mars", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             string version = (string)_version;
             File.WriteAllText("mars_client\\version.ser", version);
-            string path = Minecraft.GetOSDefaultPath();
-            CMLauncher launcher = new CMLauncher(path);
+            CMLauncher launcher = Data.launcher;
             bool forge = version.ToLower().Contains("forge");
 
             OutputManager.ShowConsoleWindow(true);
@@ -105,7 +103,7 @@ namespace TitanixClient___Forms
                 editor.GetField("<ClientToken>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(ssh, Data.clientToken);
                 editor.GetField("<AccessToken>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(ssh, Data.accessToken);
                 editor.GetField("<Username>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(ssh, Data.username);
-                editor.GetField("<UUID>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(ssh, Data.profileuuid);
+                editor.GetField("<UUID>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(ssh, Data.mcUUID);
             } else
             {
                 string username = Data.username;
@@ -122,7 +120,7 @@ namespace TitanixClient___Forms
 
                 VersionType = version,
                 GameLauncherName = "MarsClient",
-                GameLauncherVersion = "1.4",
+                GameLauncherVersion = "1.5",
             };
 
             Console.WriteLine("[MARS] Assigned launch options.");
@@ -143,6 +141,7 @@ namespace TitanixClient___Forms
             }
 
             Console.WriteLine("[MARS] Located target profile. Launching...");
+            Console.WriteLine("[MARS] Moving to new thread...");
 
             Data.hook.OnHookKeyPressed += Hook_OnHookKeyPressed;
             MLaunch launch = new MLaunch(options);
@@ -155,12 +154,18 @@ namespace TitanixClient___Forms
                 psi.UseShellExecute = false;
                 staticMC = Process.Start(psi);
                 staticMC.EnableRaisingEvents = true;
+
                 launched = true;
                 staticMC.Exited += delegate
                 {
                     //OutputManager.RemoveConsole();
+                    rpcTimer.Stop();
                     Data.rpccli.Dispose();
-                    Environment.Exit(0);
+                    Invoke((MethodInvoker)delegate
+                    {
+                        minecraftClosed = true;
+                    });
+                    mcThread.Abort();
                 };
                 staticMC.OutputDataReceived += (object _, DataReceivedEventArgs _a) =>
                 {
@@ -182,28 +187,60 @@ namespace TitanixClient___Forms
                     }
                 };
                 staticMC.BeginOutputReadLine();
-                /*if (!mcLaunchThread.IsBusy)
-                {
-                    launched = true;
-                    mcLaunchThread.RunWorkerAsync(new string[] { version, sptxt });
-                } else
-                {
-                    MessageBox.Show("The game is currently running, please close the game to launch again.");
-                    return;
-                }*/
             }));
-            //OutputManager.CreateConsole();
             mcThread.Start(launch);
+
+            int launchWaits = 0;
+            while (staticMC == null)
+            {
+                launchWaits++;
+                Console.WriteLine("[MARS] Waiting for process to launch... #{0}", launchWaits);
+                Thread.Sleep(250);
+            }
+
+            Console.WriteLine("[MARS] Waiting for main window handle...");
+            Data.mcProcess = staticMC;
+            while (staticMC.MainWindowHandle == IntPtr.Zero)
+                Thread.Sleep(100);
+            Data.mcWindow = staticMC.MainWindowHandle;
+
+            Console.WriteLine("\n\n[MARS] Got main window handle. Attaching UI framework...");
+            Console.WriteLine("[MARS] Building window...\n\n");
+
+            InGameWindow igw = new InGameWindow();
+            Data.hud = igw;
+            igw.Show();
+            SetParent(igw.Handle, Data.mcWindow);
+            igw.NowParented();
+
+            Console.WriteLine("[MARS] Begun window message pump.");
+            Console.WriteLine("[MARS] Fetching HypixelSelf info...");
+
+            if (File.Exists("mars_client\\hypixelself.ser"))
+                Data.player = HypixelSelf.Deserialize(File.ReadAllText
+                    ("mars_client\\hypixelself.ser"));
+
+            Console.WriteLine("[MARS] Loaded, if any.\n\n");
+
+            Console.WriteLine("[MARS] Finished initialization.");
         }
 
-        IntPtr minecraftHWND = IntPtr.Zero;
+        IntPtr minecraftHWND = IntPtr.Zero; // Data.mcProcess is the same.
         private void Hook_OnHookKeyPressed(HookKeyPressArgs args)
         {
             if(minecraftHWND.Equals(IntPtr.Zero))
                 minecraftHWND = staticMC.MainWindowHandle;
 
             IntPtr fore = GetForegroundWindow();
-            if (!minecraftHWND.Equals(fore)) return;
+
+            if(Data.hud != null)
+            {
+                if (!minecraftHWND.Equals(fore)
+                    && !Data.hud.Handle.Equals(fore)) return;
+            } else
+                if (!minecraftHWND.Equals(fore)) return;
+
+            
 
             bool ctrlDown = GetKeyDown(Keys.LControlKey)
                 || GetKeyDown(Keys.RControlKey);
@@ -214,7 +251,14 @@ namespace TitanixClient___Forms
                 if (kb.key == args.pressed)
                 {
                     string text = kb.game.gameInternalName;
-                    //KeyboardHooking.SendCTRLUp(minecraftHWND);
+                    
+                    if(Data.hud != null && text.Equals
+                        (KeybindManager.INTERN_GUI))
+                    {
+                        Data.hud.ToggleVisible();
+                        continue;
+                    }
+
                     Thread.Sleep(50);
                     SendKeys.SendWait("/");
                     Thread.Sleep(50);
@@ -235,7 +279,7 @@ namespace TitanixClient___Forms
             if (File.Exists("mars_client\\uuid.tok"))
                 File.Delete("mars_client\\uuid.tok");
 
-            Data.accessToken = ""; Data.uuid = "";
+            Data.accessToken = ""; Data.mojangUUID = "";
             SendToBack();
         }
 
@@ -264,27 +308,19 @@ namespace TitanixClient___Forms
         private void MainLauncher_Load(object sender, EventArgs e)
         {
             string path = Minecraft.GetOSDefaultPath();
+            Data.MC_OS_PATH = path;
             CMLauncher launcher = new CMLauncher(path);
             launcher.UpdateProfiles();
-            versionSelector.Items.Clear();
-            foreach(MProfileMetadata md in launcher.Profiles)
-            {
-                string name = md.Name;
-                if (!name.ToLower().Contains('w') &&
-                !name.ToLower().Contains("pre"))
-                {
-                    versionSelector.Items.Add(md.Name);
-                }
-            }
+            Data.launcher = launcher;
             if(File.Exists("mars_client\\serverip.ser"))
             {
                 string ip = File.ReadAllText("mars_client\\serverip.ser");
-                serverPicker.Text = ip;
+                Data.serverIP = ip;
             }
             if (File.Exists("mars_client\\version.ser"))
             {
                 string ver = File.ReadAllText("mars_client\\version.ser");
-                versionSelector.SelectedItem = ver;
+                Data.versionString = ver;
             }
         }
 
@@ -355,11 +391,13 @@ namespace TitanixClient___Forms
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DeleteObject([In] IntPtr hObject);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
         static bool GetKeyDown(Keys k)
         {
             return Convert.ToBoolean(GetKeyState(k) & 0x8000);
         }
-
         private void keybindsButton_Click(object sender, EventArgs e)
         {
             SettingsMenu stm = new SettingsMenu();

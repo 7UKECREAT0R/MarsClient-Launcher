@@ -1,4 +1,4 @@
-﻿namespace TitanixClient___Forms
+﻿namespace MarsClientLauncher
 {
     partial class SettingsMenu
     {
@@ -32,9 +32,9 @@
             this.otherOptions = new System.Windows.Forms.Button();
             this.keybindsOptions = new System.Windows.Forms.Button();
             this.versionOptions = new System.Windows.Forms.Button();
-            this.other = new TitanixClient___Forms.Settings_OtherControl();
-            this.keybinds = new TitanixClient___Forms.Settings_KeybindsControl();
-            this.version = new TitanixClient___Forms.Settings_VersionControl();
+            this.version = new MarsClientLauncher.Settings_VersionControl();
+            this.keybinds = new MarsClientLauncher.Settings_KeybindsControl();
+            this.other = new MarsClientLauncher.Settings_OtherControl();
             this.SuspendLayout();
             // 
             // exitButton
@@ -102,40 +102,40 @@
             this.versionOptions.Name = "versionOptions";
             this.versionOptions.Size = new System.Drawing.Size(180, 71);
             this.versionOptions.TabIndex = 2;
-            this.versionOptions.Text = "VERSIONS";
+            this.versionOptions.Text = "LAUNCHER";
             this.versionOptions.UseVisualStyleBackColor = false;
             this.versionOptions.Click += new System.EventHandler(this.versionOptions_Click);
+            // 
+            // version
+            // 
+            this.version.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.version.Location = new System.Drawing.Point(1262, 74);
+            this.version.Name = "version";
+            this.version.Size = new System.Drawing.Size(568, 609);
+            this.version.TabIndex = 5;
+            // 
+            // keybinds
+            // 
+            this.keybinds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.keybinds.Location = new System.Drawing.Point(1266, 74);
+            this.keybinds.Name = "keybinds";
+            this.keybinds.Size = new System.Drawing.Size(568, 609);
+            this.keybinds.TabIndex = 4;
             // 
             // other
             // 
             this.other.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
-            this.other.Location = new System.Drawing.Point(696, 72);
+            this.other.Location = new System.Drawing.Point(1266, 74);
             this.other.Margin = new System.Windows.Forms.Padding(0);
             this.other.Name = "other";
             this.other.Size = new System.Drawing.Size(568, 610);
             this.other.TabIndex = 3;
             // 
-            // keybinds
-            // 
-            this.keybinds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.keybinds.Location = new System.Drawing.Point(696, 73);
-            this.keybinds.Name = "keybinds";
-            this.keybinds.Size = new System.Drawing.Size(568, 609);
-            this.keybinds.TabIndex = 4;
-            // 
-            // version
-            // 
-            this.version.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.version.Location = new System.Drawing.Point(696, 73);
-            this.version.Name = "version";
-            this.version.Size = new System.Drawing.Size(568, 609);
-            this.version.TabIndex = 5;
-            // 
             // SettingsMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSettingsSplash;
+            this.BackgroundImage = global::MarsClientLauncher.Properties.Resources.marsSettingsSplash;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.version);

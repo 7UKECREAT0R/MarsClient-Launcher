@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public partial class Settings_OtherControl : UserControl
     {
@@ -74,9 +74,7 @@ namespace TitanixClient___Forms
         private void UseRichPresence_OnCheckedChanged(bool isChecked)
         {
             if(!isChecked)
-            {
                 Data.rpccli?.ClearPresence();
-            }
 
             Data._usingRichPresence = isChecked;
             Data._showGamePlaying = isChecked;
@@ -96,13 +94,14 @@ namespace TitanixClient___Forms
 
         private void Settings_OtherControl_Load(object sender, EventArgs e)
         {
-            enabledPos = Location;
+            enabledPos = new Point(SettingsMenu.SETTINGS_TAB_X, 74);
             disabledPos = enabledPos;
             disabledPos.X += Size.Width;
             Location = disabledPos;
             timer = new Timer();
             timer.Interval = 16;
             timer.Tick += Timer_Tick;
+
             timer.Start();
         }
 

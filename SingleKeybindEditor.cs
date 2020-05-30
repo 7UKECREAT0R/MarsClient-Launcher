@@ -8,13 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     public partial class SingleKeybindEditor : Form
     {
         public bool confirmed = false;
         public Keybind keybind;
-        bool loaded = false;
         public SingleKeybindEditor()
         {
             InitializeComponent();
@@ -24,7 +23,6 @@ namespace TitanixClient___Forms
                 game = null,
                 key = 0
             };
-            loaded = true;
         }
         public SingleKeybindEditor(Keybind pre)
         {
@@ -33,7 +31,6 @@ namespace TitanixClient___Forms
             keybind = pre;
             gameBox.SelectedItem = pre.game;
             keyBox.SelectedItem = pre.key;
-            loaded = true;
         }
         void PopulateComboBoxes()
         {

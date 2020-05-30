@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     static class OutputManager
     {
@@ -74,7 +74,7 @@ namespace TitanixClient___Forms
 
                 Data.party.inParty = true;
                 Data.party.members.Clear();
-                HypixelUser hp = new HypixelUser(user);
+                HypixelParsedUser hp = new HypixelParsedUser(user);
                 Data.party.members.Add(hp.name);
                 Data.party.unknownUsers = false;
             }
@@ -86,7 +86,7 @@ namespace TitanixClient___Forms
                     .Split(new string[] { " joined the" }, StringSplitOptions.None)[0];
                 Data.party.inParty = true;
                 Data.party.unknownUsers = false;
-                HypixelUser hp = new HypixelUser(user);
+                HypixelParsedUser hp = new HypixelParsedUser(user);
                 Data.party.members.Add(hp.name);
             }
             if (text.Contains(" has disbanded the party!") ||
@@ -101,7 +101,7 @@ namespace TitanixClient___Forms
                 string user = text
                     .Split(new string[] { "[CHAT] " }, StringSplitOptions.None)[1]
                     .Split(new string[] { " has been" }, StringSplitOptions.None)[0];
-                HypixelUser hp = new HypixelUser(user);
+                HypixelParsedUser hp = new HypixelParsedUser(user);
                 Data.party.members.Remove(hp.name);
             }
             if (text.Contains(" left the party."))
@@ -109,7 +109,7 @@ namespace TitanixClient___Forms
                 string user = text
                     .Split(new string[] { "[CHAT] " }, StringSplitOptions.None)[1]
                     .Split(new string[] { " left the party." }, StringSplitOptions.None)[0];
-                HypixelUser hp = new HypixelUser(user);
+                HypixelParsedUser hp = new HypixelParsedUser(user);
                 Data.party.members.Remove(hp.name);
             }
             if (text.Contains("[CHAT] Party members "))
@@ -126,8 +126,8 @@ namespace TitanixClient___Forms
                 string[] parts = partC.Split('?');
                 foreach(string user in parts)
                 {
-                    HypixelUser partyMember =
-                        new HypixelUser(user);
+                    HypixelParsedUser partyMember =
+                        new HypixelParsedUser(user);
                     if(partyMember.name.Equals(Data.username))
                         continue;
                     Data.party.members.Add(partyMember.name);

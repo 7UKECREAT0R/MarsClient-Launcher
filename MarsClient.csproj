@@ -41,9 +41,6 @@
     <Reference Include="DiscordRPC, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DiscordRichPresence.1.0.121\lib\net35\DiscordRPC.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetZip">
-      <HintPath>..\..\..\..\Desktop\MinecraftLauncherLibrary-master\CmlLib\bin\Debug\DotNetZip.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -72,6 +69,13 @@
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HypixelSelf.cs" />
+    <Compile Include="InGameWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InGameWindow.Designer.cs">
+      <DependentUpon>InGameWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="KeybindManager.cs" />
     <Compile Include="KeybindsForm.cs">
@@ -148,6 +152,9 @@
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="InGameWindow.resx">
+      <DependentUpon>InGameWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="KeybindsForm.resx">
       <DependentUpon>KeybindsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -161,6 +168,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MarsClientLauncher.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsMenu.resx">
       <DependentUpon>SettingsMenu.cs</DependentUpon>

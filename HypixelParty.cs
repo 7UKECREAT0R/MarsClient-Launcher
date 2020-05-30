@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TitanixClient___Forms
+namespace MarsClientLauncher
 {
     class HypixelParty
     {
@@ -47,14 +47,14 @@ namespace TitanixClient___Forms
             return final;
         }
     }
-    class HypixelUser
+    class HypixelParsedUser
     {
         public bool hasRank { get; private set; }
         public string name { get; private set; }
         public string rank { get; private set; }
         public string fullName { get; private set; }
 
-        public HypixelUser(string fullname)
+        public HypixelParsedUser(string fullname)
         {
             fullName = fullname;
             string user = fullname.Trim();

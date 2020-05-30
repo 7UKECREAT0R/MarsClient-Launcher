@@ -1,4 +1,4 @@
-﻿namespace TitanixClient___Forms
+﻿namespace MarsClientLauncher
 {
     partial class MainLauncher
     {
@@ -32,8 +32,6 @@
             this.launchButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.versionSelector = new System.Windows.Forms.ComboBox();
-            this.serverPicker = new System.Windows.Forms.TextBox();
             this.rpcTimer = new System.Windows.Forms.Timer(this.components);
             this.keybindsButton = new System.Windows.Forms.Button();
             this.signout = new System.Windows.Forms.Button();
@@ -63,23 +61,6 @@
             // 
             this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // versionSelector
-            // 
-            this.versionSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.versionSelector.FormattingEnabled = true;
-            this.versionSelector.Location = new System.Drawing.Point(527, 567);
-            this.versionSelector.Name = "versionSelector";
-            this.versionSelector.Size = new System.Drawing.Size(226, 21);
-            this.versionSelector.Sorted = true;
-            this.versionSelector.TabIndex = 4;
-            // 
-            // serverPicker
-            // 
-            this.serverPicker.Location = new System.Drawing.Point(528, 594);
-            this.serverPicker.Name = "serverPicker";
-            this.serverPicker.Size = new System.Drawing.Size(225, 20);
-            this.serverPicker.TabIndex = 7;
             // 
             // rpcTimer
             // 
@@ -123,12 +104,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::TitanixClient___Forms.Properties.Resources.marsSplash2;
+            this.BackgroundImage = global::MarsClientLauncher.Properties.Resources.marsSplash2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.signout);
             this.Controls.Add(this.keybindsButton);
-            this.Controls.Add(this.serverPicker);
-            this.Controls.Add(this.versionSelector);
             this.Controls.Add(this.launchButton);
             this.DoubleBuffered = true;
             this.Name = "MainLauncher";
@@ -136,7 +115,6 @@
             this.Load += new System.EventHandler(this.MainLauncher_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainLauncher_Paint);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -145,8 +123,6 @@
         private System.Windows.Forms.Button launchButton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ComboBox versionSelector;
-        private System.Windows.Forms.TextBox serverPicker;
         private System.Windows.Forms.Timer rpcTimer;
         private System.Windows.Forms.Button keybindsButton;
         private System.Windows.Forms.Button signout;
