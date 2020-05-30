@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TitanixClient___Forms.Properties
+namespace MarsClientLauncher.Properties
 {
 
 
