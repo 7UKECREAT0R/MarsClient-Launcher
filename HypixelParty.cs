@@ -38,7 +38,7 @@ namespace MarsClientLauncher
                 last = "and " + last;
                 users[users.Length - 1] = last;
             }
-            string ustring = string.Join(", ", members);
+            string ustring = string.Join(", ", users);
             string final = "In a party with " + ustring;
             if(more)
             {
@@ -49,24 +49,24 @@ namespace MarsClientLauncher
     }
     class HypixelParsedUser
     {
-        public bool hasRank { get; private set; }
-        public string name { get; private set; }
-        public string rank { get; private set; }
-        public string fullName { get; private set; }
+        public bool HasRank { get; private set; }
+        public string Name { get; private set; }
+        public string Rank { get; private set; }
+        public string FullName { get; private set; }
 
         public HypixelParsedUser(string fullname)
         {
-            fullName = fullname;
+            FullName = fullname;
             string user = fullname.Trim();
-            hasRank = user.Contains(' ');
-            if (hasRank)
+            HasRank = user.Contains(' ');
+            if (HasRank)
             {
                 string[] spl = user.Split(' ');
-                name = spl[1]; // [VIP] Hypix__L
-                rank = spl[0];
+                Name = spl[1]; // [VIP] Hypix__L
+                Rank = spl[0];
             }
             else
-                name = user; // cwxzyy
+                Name = user; // cwxzyy
         }
     }
     class HypixelGame

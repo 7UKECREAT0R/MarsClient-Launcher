@@ -38,7 +38,7 @@
             // sizeUpdater
             // 
             this.sizeUpdater.Interval = 16;
-            this.sizeUpdater.Tick += new System.EventHandler(this.sizeUpdater_Tick);
+            this.sizeUpdater.Tick += new System.EventHandler(this.SizeUpdater_Tick);
             // 
             // friendsList
             // 
@@ -47,9 +47,9 @@
             this.friendsList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.friendsList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.friendsList.HideSelection = false;
-            this.friendsList.Location = new System.Drawing.Point(24, 24);
+            this.friendsList.Location = new System.Drawing.Point(20, 42);
             this.friendsList.Name = "friendsList";
-            this.friendsList.Size = new System.Drawing.Size(580, 672);
+            this.friendsList.Size = new System.Drawing.Size(580, 323);
             this.friendsList.TabIndex = 0;
             this.friendsList.UseCompatibleStateImageBehavior = false;
             // 
@@ -57,7 +57,7 @@
             // 
             this.friendUpdateTimer.Enabled = true;
             this.friendUpdateTimer.Interval = 1200;
-            this.friendUpdateTimer.Tick += new System.EventHandler(this.friendUpdateTimer_Tick);
+            this.friendUpdateTimer.Tick += new System.EventHandler(this.FriendUpdateTimer_Tick);
             // 
             // InGameWindow
             // 

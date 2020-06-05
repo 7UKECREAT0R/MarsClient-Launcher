@@ -92,18 +92,19 @@ namespace MarsClientLauncher
             return (int)Math.Round(f);
         }
 
-        private void exitbutton_Click(object sender, EventArgs e)
+        private void Exitbutton_Click(object sender, EventArgs e)
         {
             Close();
         }
-        private void minimizebutton_Click(object sender, EventArgs e)
+        private void Minimizebutton_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
+
+
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
-
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
@@ -133,7 +134,7 @@ namespace MarsClientLauncher
             Data.hud?.Dispose();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             Point orig = Location;
             Point n = orig;
@@ -264,7 +265,7 @@ namespace MarsClientLauncher
 
             animator.Stop();
         }
-        private void closingTimer_Tick(object sender, EventArgs e)
+        private void ClosingTimer_Tick(object sender, EventArgs e)
         {
             if (mainLauncher1.minecraftClosed)
             {

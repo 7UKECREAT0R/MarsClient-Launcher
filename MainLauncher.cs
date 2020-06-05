@@ -63,7 +63,7 @@ namespace MarsClientLauncher
             //var logo = Properties.Resources.titanix_logo;
             //e.Graphics.DrawImage(logo, new Rectangle(40, 25, divideRound(logo.Width, 3), divideRound(logo.Height, 3)));
         }
-        public int divideRound(double a, double b)
+        public int DivideAndRound(double a, double b)
         {
             return (int)Math.Round(a / b);
         }
@@ -71,7 +71,7 @@ namespace MarsClientLauncher
         {
             return (int)Math.Round((1 - t) * a + t * b);
         }
-        private void launchButton_Click(object sender, EventArgs e)
+        private void LaunchButton_Click(object sender, EventArgs e)
         {
             string sptxt = Data.serverIP;
             if (!string.IsNullOrEmpty(sptxt))
@@ -271,7 +271,7 @@ namespace MarsClientLauncher
             }
         }
 
-        private void signout_Click(object sender, EventArgs e)
+        private void Signout_Click(object sender, EventArgs e)
         {
             if(File.Exists("mars_client\\accessToken.tok"))
                 File.Delete("mars_client\\accessToken.tok");
@@ -283,18 +283,17 @@ namespace MarsClientLauncher
             SendToBack();
         }
 
-        private void launchButton_MouseEnter(object sender, EventArgs e)
+        private void LaunchButton_MouseEnter(object sender, EventArgs e)
         {
             if(!launched)
                 buttonGoalRoundness = 60;
         }
-        private void launchButton_MouseLeave(object sender, EventArgs e)
+        private void LaunchButton_MouseLeave(object sender, EventArgs e)
         {
             if(!launched)
                 buttonGoalRoundness = 20;
         }
-
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Animator_Tick(object sender, EventArgs e)
         {
             if (!launched)
             {
@@ -304,7 +303,6 @@ namespace MarsClientLauncher
                 launchButton.Region = RoundedRect(buttonCurrentRoundness, launchButton.Size);
             }
         }
-
         private void MainLauncher_Load(object sender, EventArgs e)
         {
             string path = Minecraft.GetOSDefaultPath();
@@ -323,18 +321,6 @@ namespace MarsClientLauncher
                 Data.versionString = ver;
             }
         }
-
-        [DllImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetPhysicallyInstalledSystemMemory(out ulong TotalMemoryInKilobytes);
-        internal int GetInstalledMemoryMB()
-        {
-            ulong memkb;
-            GetPhysicallyInstalledSystemMemory(out memkb);
-            int memmb = Convert.ToInt32(memkb)/1000;
-            return memmb;
-        }
-
         private void RpcTimer_Tick(object sender, EventArgs e)
         {
             if (staticMC != null)
@@ -380,6 +366,23 @@ namespace MarsClientLauncher
                 }
             }
         }
+        private void keybindsButton_Click(object sender, EventArgs e)
+        {
+            SettingsMenu stm = new SettingsMenu();
+            stm.FormClosing += delegate { stm.Dispose(); };
+            stm.Show();
+        }
+
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetPhysicallyInstalledSystemMemory(out ulong totalkb);
+        internal int GetInstalledMemoryMB()
+        {
+            ulong memkb;
+            GetPhysicallyInstalledSystemMemory(out memkb);
+            int memmb = Convert.ToInt32(memkb) / 1000;
+            return memmb;
+        }
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
@@ -397,12 +400,6 @@ namespace MarsClientLauncher
         static bool GetKeyDown(Keys k)
         {
             return Convert.ToBoolean(GetKeyState(k) & 0x8000);
-        }
-        private void keybindsButton_Click(object sender, EventArgs e)
-        {
-            SettingsMenu stm = new SettingsMenu();
-            stm.FormClosing += delegate {stm.Dispose();};
-            stm.Show();
         }
     }
 }

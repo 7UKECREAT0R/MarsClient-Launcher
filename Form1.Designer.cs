@@ -41,7 +41,7 @@
             // 
             this.animator.Enabled = true;
             this.animator.Interval = 1000;
-            this.animator.Tick += new System.EventHandler(this.timer1_Tick);
+            this.animator.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // exitbutton
             // 
@@ -57,7 +57,7 @@
             this.exitbutton.TabIndex = 1;
             this.exitbutton.Text = "X";
             this.exitbutton.UseVisualStyleBackColor = false;
-            this.exitbutton.Click += new System.EventHandler(this.exitbutton_Click);
+            this.exitbutton.Click += new System.EventHandler(this.Exitbutton_Click);
             // 
             // notifyIcon1
             // 
@@ -89,7 +89,7 @@
             // 
             this.closingTimer.Enabled = true;
             this.closingTimer.Interval = 250;
-            this.closingTimer.Tick += new System.EventHandler(this.closingTimer_Tick);
+            this.closingTimer.Tick += new System.EventHandler(this.ClosingTimer_Tick);
             // 
             // Form1
             // 

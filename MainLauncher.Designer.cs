@@ -53,14 +53,14 @@
             this.launchButton.TabIndex = 0;
             this.launchButton.Text = "LAUNCH";
             this.launchButton.UseVisualStyleBackColor = false;
-            this.launchButton.Click += new System.EventHandler(this.launchButton_Click);
-            this.launchButton.MouseEnter += new System.EventHandler(this.launchButton_MouseEnter);
-            this.launchButton.MouseLeave += new System.EventHandler(this.launchButton_MouseLeave);
+            this.launchButton.Click += new System.EventHandler(this.LaunchButton_Click);
+            this.launchButton.MouseEnter += new System.EventHandler(this.LaunchButton_MouseEnter);
+            this.launchButton.MouseLeave += new System.EventHandler(this.LaunchButton_MouseLeave);
             // 
             // timer1
             // 
             this.timer1.Interval = 10;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Animator_Tick);
             // 
             // rpcTimer
             // 
@@ -98,7 +98,7 @@
             this.signout.TabIndex = 8;
             this.signout.Text = "SIGN OUT";
             this.signout.UseVisualStyleBackColor = false;
-            this.signout.Click += new System.EventHandler(this.signout_Click);
+            this.signout.Click += new System.EventHandler(this.Signout_Click);
             // 
             // MainLauncher
             // 

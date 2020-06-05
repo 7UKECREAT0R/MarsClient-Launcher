@@ -17,7 +17,6 @@ namespace MarsClientLauncher
 {
     public partial class InGameWindow : Form
     {
-        bool loaded = false;
         private const string HPTK = "PWMpQGgoRZPwPmgm]l33RWEmOWn{]WXwQpX7P}Mk\\pMp]m]l";
         private const string HEAD_PATH = "mars_client\\heads\\";
         private const string FRIENDAPI = "https://api.hypixel.net/friends?key={SETHPTK}&uuid={SETUUID}";
@@ -25,8 +24,6 @@ namespace MarsClientLauncher
         private string HPTK_A()
         {
             char[] TSH = HPTK.ToCharArray();
-            StringBuilder BUFFER = new StringBuilder();
-
             for (int i = 0; i < TSH.Length; i++)
             {
                 byte DAT = (byte)TSH[i];
@@ -52,7 +49,7 @@ namespace MarsClientLauncher
         {
             open = !open;
 
-            sizeUpdater_Tick(null, null);
+            SizeUpdater_Tick(null, null);
 
             if (open)
             {
@@ -62,7 +59,7 @@ namespace MarsClientLauncher
                     BackgroundImage = null;
                 }
                 BackgroundImage = GetMCWindowImage();
-                if (!loaded)
+                if (!Data.player.loaded)
                 {
                     JObject structure = Post(FRIENDAPI, null);
                     JArray entries = structure["records"] as JArray;
@@ -71,10 +68,11 @@ namespace MarsClientLauncher
                     {
                         string fUUID = friend["uuidReceiver"].ToString();
                         HypixelFriend newFriend = new HypixelFriend(fUUID);
-                        Data.player.AddFriend(newFriend);
+                        Data.player.AddFriend(newFriend); // uses cached names
                     }
 
-                    loaded = true;
+                    Console.WriteLine("[MARS] Got friend UUIDs.");
+                    Data.player.loaded = true;
                 }
             }
             if(!open)
@@ -90,13 +88,13 @@ namespace MarsClientLauncher
         {
             sizeUpdater.Start();
         }
-        public void sizeUpdater_Tick(object sender, EventArgs e)
+        public void SizeUpdater_Tick(object sender, EventArgs e)
         {
             Location = new Point(-8, -31);
             if (open)
             {
                 RECT size = new RECT();
-                GetWindowRect(Data.mcWindow, out size);
+                InGameUser32.GetWindowRect(Data.mcWindow, ref size);
                 Size = new Size(
                     (size.Right - size.Left),
                     (size.Bottom - size.Top));
@@ -109,9 +107,6 @@ namespace MarsClientLauncher
         {
             friendsList.Width = Width / 2;
         }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
         
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -184,8 +179,8 @@ namespace MarsClientLauncher
             }
         }
 
-        // Update next friend.
-        private void friendUpdateTimer_Tick(object sender, EventArgs e)
+        // Every call downloads friend info if not present.
+        private void FriendUpdateTimer_Tick(object sender, EventArgs e)
         {
             if (Data.player == null)
                 return;
@@ -212,20 +207,19 @@ namespace MarsClientLauncher
                     JToken textures = JObject.Parse(info)["textures"];
                     Bitmap loadedSkin = null; bool hasSkin = true;
                     // SKIN field is missing if no skin.
-                    try { string _ = textures["SKIN"].ToString(); } catch (Exception) { hasSkin = false; }
+                    try { string _ = textures["SKIN"].ToString(); }
+                        catch (Exception) { hasSkin = false; }
                     if (hasSkin)
+                    using (WebClient wc = new WebClient())
                     {
-                        using (WebClient wc = new WebClient())
+                        wc.DownloadFile(textures["SKIN"]["url"].ToString(), savedFull);
+                        using (Image img = Image.FromFile(savedFull))
                         {
-                            wc.DownloadFile(textures["SKIN"]["url"].ToString(), savedFull);
-                            using (Image img = Image.FromFile(savedFull))
+                            loadedSkin = new Bitmap(8, 8);
+                            using (Graphics gr = Graphics.FromImage(loadedSkin))
                             {
-                                loadedSkin = new Bitmap(8, 8);
-                                using (Graphics gr = Graphics.FromImage(loadedSkin))
-                                {
-                                    gr.DrawImage(img, 0, 0, new Rectangle
-                                        (8, 8, 8, 8), GraphicsUnit.Pixel);
-                                }
+                                gr.DrawImage(img, 0, 0, new Rectangle
+                                    (8, 8, 8, 8), GraphicsUnit.Pixel);
                             }
                         }
                     }
@@ -244,6 +238,8 @@ namespace MarsClientLauncher
 
                 f.SetName(username);
                 self.SetNextNeededUsername(f);
+                Console.WriteLine("[MARS] Fetched friend info for {0}. {1}/{2} done.",
+                    username, self.LoadedCount(), self.Count());
             }
         }
     }
@@ -251,21 +247,28 @@ namespace MarsClientLauncher
     {
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowDC(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, ref InGameWindow.RECT rect);
+
         [DllImport("user32.dll")]
         public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetCursorPos(int x, int y);
+
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetCursorPos(out InGameGdi32.POINT lpPoint);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
     }
@@ -273,14 +276,19 @@ namespace MarsClientLauncher
     {
         [DllImport("gdi32.dll")]
         public static extern bool BitBlt(IntPtr hObject, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hObjectSource, int nXSrc, int nYSrc, int dwRop);
+
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateCompatibleBitmap(IntPtr hDC, int nWidth, int nHeight);
+
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateCompatibleDC(IntPtr hDC);
+
         [DllImport("gdi32.dll")]
         public static extern bool DeleteDC(IntPtr hDC);
+
         [DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
+
         [DllImport("gdi32.dll")]
         public static extern IntPtr SelectObject(IntPtr hDC, IntPtr hObject);
 
@@ -296,12 +304,12 @@ namespace MarsClientLauncher
                 this.Y = y;
             }
 
-            public static implicit operator System.Drawing.Point(POINT p)
+            public static implicit operator Point(POINT p)
             {
                 return new System.Drawing.Point(p.X, p.Y);
             }
 
-            public static implicit operator POINT(System.Drawing.Point p)
+            public static implicit operator POINT(Point p)
             {
                 return new POINT(p.X, p.Y);
             }
@@ -314,10 +322,10 @@ namespace MarsClientLauncher
         private int[] _green;
         private int[] _blue;
 
-        private int _width;
-        private int _height;
+        private readonly int _width;
+        private readonly int _height;
 
-        private ParallelOptions _pOptions = new ParallelOptions { MaxDegreeOfParallelism = 16 };
+        private readonly ParallelOptions _pOptions = new ParallelOptions { MaxDegreeOfParallelism = 16 };
 
         public GaussianBlur(Bitmap image)
         {
@@ -345,7 +353,6 @@ namespace MarsClientLauncher
                 _blue[i] = (source[i] & 0x0000ff);
             });
         }
-
         public Bitmap Process(int radial, int darken)
         {
             var newAlpha = new int[_width * _height];
@@ -355,10 +362,10 @@ namespace MarsClientLauncher
             var dest = new int[_width * _height];
 
             Parallel.Invoke(
-                () => gaussBlur_4(_alpha, newAlpha, radial),
-                () => gaussBlur_4(_red, newRed, radial),
-                () => gaussBlur_4(_green, newGreen, radial),
-                () => gaussBlur_4(_blue, newBlue, radial));
+                () => GaussianBlurSquared(_alpha, newAlpha, radial),
+                () => GaussianBlurSquared(_red, newRed, radial),
+                () => GaussianBlurSquared(_green, newGreen, radial),
+                () => GaussianBlurSquared(_blue, newBlue, radial));
 
             _alpha = null;
             _red = null;
@@ -392,16 +399,14 @@ namespace MarsClientLauncher
 
             return image;
         }
-
-        private void gaussBlur_4(int[] source, int[] dest, int r)
+        private void GaussianBlurSquared(int[] source, int[] dest, int r)
         {
-            var bxs = boxesForGauss(r, 3);
-            boxBlur_4(source, dest, _width, _height, (bxs[0] - 1) / 2);
-            boxBlur_4(dest, source, _width, _height, (bxs[1] - 1) / 2);
-            boxBlur_4(source, dest, _width, _height, (bxs[2] - 1) / 2);
+            var bxs = GuassianBlurBoxes(r, 3);
+            BoxBlurSquare(source, dest, _width, _height, (bxs[0] - 1) / 2);
+            BoxBlurSquare(dest, source, _width, _height, (bxs[1] - 1) / 2);
+            BoxBlurSquare(source, dest, _width, _height, (bxs[2] - 1) / 2);
         }
-
-        private int[] boxesForGauss(int sigma, int n)
+        private int[] GuassianBlurBoxes(int sigma, int n)
         {
             var wIdeal = Math.Sqrt((12 * sigma * sigma / n) + 1);
             var wl = (int)Math.Floor(wIdeal);
@@ -415,15 +420,13 @@ namespace MarsClientLauncher
             for (var i = 0; i < n; i++) sizes.Add(i < m ? wl : wu);
             return sizes.ToArray();
         }
-
-        private void boxBlur_4(int[] source, int[] dest, int w, int h, int r)
+        private void BoxBlurSquare(int[] source, int[] dest, int w, int h, int r)
         {
             for (var i = 0; i < source.Length; i++) dest[i] = source[i];
-            boxBlurH_4(dest, source, w, h, r);
-            boxBlurT_4(source, dest, w, h, r);
+            BoxBlurSquareH(dest, source, w, h, r);
+            BoxBlurSquareT(source, dest, w, h, r);
         }
-
-        private void boxBlurH_4(int[] source, int[] dest, int w, int h, int r)
+        private void BoxBlurSquareH(int[] source, int[] dest, int w, int h, int r)
         {
             var iar = (double)1 / (r + r + 1);
             Parallel.For(0, h, _pOptions, i =>
@@ -452,8 +455,7 @@ namespace MarsClientLauncher
                 }
             });
         }
-
-        private void boxBlurT_4(int[] source, int[] dest, int w, int h, int r)
+        private void BoxBlurSquareT(int[] source, int[] dest, int w, int h, int r)
         {
             var iar = (double)1 / (r + r + 1);
             Parallel.For(0, w, _pOptions, i =>

@@ -75,7 +75,7 @@ namespace MarsClientLauncher
                 Data.party.inParty = true;
                 Data.party.members.Clear();
                 HypixelParsedUser hp = new HypixelParsedUser(user);
-                Data.party.members.Add(hp.name);
+                Data.party.members.Add(hp.Name);
                 Data.party.unknownUsers = false;
             }
             if (text.Contains(" joined the party!"))
@@ -87,7 +87,7 @@ namespace MarsClientLauncher
                 Data.party.inParty = true;
                 Data.party.unknownUsers = false;
                 HypixelParsedUser hp = new HypixelParsedUser(user);
-                Data.party.members.Add(hp.name);
+                Data.party.members.Add(hp.Name);
             }
             if (text.Contains(" has disbanded the party!") ||
                 text.Contains("The party was disbanded because all invites have expired and all members have left."))
@@ -102,7 +102,7 @@ namespace MarsClientLauncher
                     .Split(new string[] { "[CHAT] " }, StringSplitOptions.None)[1]
                     .Split(new string[] { " has been" }, StringSplitOptions.None)[0];
                 HypixelParsedUser hp = new HypixelParsedUser(user);
-                Data.party.members.Remove(hp.name);
+                Data.party.members.Remove(hp.Name);
             }
             if (text.Contains(" left the party."))
             {
@@ -110,7 +110,7 @@ namespace MarsClientLauncher
                     .Split(new string[] { "[CHAT] " }, StringSplitOptions.None)[1]
                     .Split(new string[] { " left the party." }, StringSplitOptions.None)[0];
                 HypixelParsedUser hp = new HypixelParsedUser(user);
-                Data.party.members.Remove(hp.name);
+                Data.party.members.Remove(hp.Name);
             }
             if (text.Contains("[CHAT] Party members "))
             {
@@ -128,9 +128,9 @@ namespace MarsClientLauncher
                 {
                     HypixelParsedUser partyMember =
                         new HypixelParsedUser(user);
-                    if(partyMember.name.Equals(Data.username))
+                    if(partyMember.Name.Equals(Data.username))
                         continue;
-                    Data.party.members.Add(partyMember.name);
+                    Data.party.members.Add(partyMember.Name);
                 }
             }
         }

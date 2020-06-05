@@ -9,7 +9,9 @@ namespace MarsClientLauncher
 {
     class HypixelSelf
     {
+        List<HypixelFriend> fakeFriends;
         List<HypixelFriend> friends;
+        public bool loaded = false;
 
         public HypixelSelf()
         {
@@ -17,7 +19,22 @@ namespace MarsClientLauncher
         }
         public void AddFriend(HypixelFriend friend)
         {
-            friends.Add(friend);
+            if(!friend.loaded && fakeFriends != null)
+            {
+                // Check fakeFriends to find a possibly loaded name.
+                if(fakeFriends.Any(f => f.UUID.Equals(friend.UUID)))
+                {
+                    // If found, apply to friend object.
+                    HypixelFriend fake = fakeFriends.First
+                        (f => f.UUID.Equals(friend.UUID));
+                    if(fake.loaded)
+                        friend.SetName(fake.name);
+                }
+            }
+
+            if (!friends.Any(f => f.UUID.Equals(friend.UUID))
+            && !friend.UUID.Equals(Data.mcUUID))
+                friends.Add(friend);
         }
         public void RemoveFriendByUsername(string username)
         {
@@ -55,31 +72,55 @@ namespace MarsClientLauncher
                 friends.Add(friend);
             return;
         }
+        public int Count() { return friends.Count; }
+        public int LoadedCount() { return friends.Count(f => f.loaded); }
 
         public string Serialize()
         {
             StringBuilder json = new StringBuilder();
             json.AppendLine("[");
-            foreach(HypixelFriend f in friends)
-                json.AppendLine(f.AsJSON());
+            int i = -1;
+            if (loaded)
+            {
+                foreach (HypixelFriend f in friends)
+                {
+                    i++;
+                    if ((i - 1) >= friends.Count)
+                        json.AppendLine(f.AsJSON());
+                    else
+                        json.AppendLine(f.AsJSON() + ",");
+                }
+            } else if(fakeFriends != null)
+            {
+                foreach (HypixelFriend f in fakeFriends)
+                {
+                    i++;
+                    if((i-1) >= fakeFriends.Count)
+                        json.AppendLine(f.AsJSON());
+                    else
+                        json.AppendLine(f.AsJSON() + ",");
+                }
+            }
             json.Append("\n]");
-            return json.ToString();
+            string fin = json.ToString();
+            return fin;
         }
         public static HypixelSelf Deserialize(string dat)
         {
             JArray json = JArray.Parse(dat);
             HypixelSelf self = new HypixelSelf();
+            self.fakeFriends = new List<HypixelFriend>();
             foreach (JToken obj in json)
             {
                 string UUID = obj.Value<string>("UUID");
                 string name = obj.Value<string>("name");
-                bool loaded = obj.Value<bool>("loaded");
+                bool loaded = bool.Parse(obj.Value<string>("loaded"));
 
                 HypixelFriend f = new HypixelFriend(UUID);
                 if (loaded)
                     f.SetName(name);
 
-                self.AddFriend(f);
+                self.fakeFriends.Add(f);
             }
             return self;
         }
@@ -107,7 +148,7 @@ namespace MarsClientLauncher
 "  {\n"+
 "        \"UUID\":\"" + UUID + "\",\n" +
 "        \"name\":\"" + name + "\",\n" +
-"        \"loaded\":" + loaded + "\n" +
+"        \"loaded\":\"" + loaded + "\"\n" +
 "    }";
         }
     }
